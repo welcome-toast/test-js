@@ -3,6 +3,14 @@ import viteLogo from "/vite.svg";
 import { setupCounter } from "./counter.js";
 import javascriptLogo from "./javascript.svg";
 
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
+const client = supabase.createClient(supabaseUrl, supabaseKey);
+async function getProject() {
+  const { data: project, error } = await client.from("project").select("id");
+}
+getProject();
+
 const app = document.querySelector("#app");
 app.innerHTML = `
   <div>
@@ -25,27 +33,14 @@ app.innerHTML = `
 setupCounter(document.querySelector(".counter"));
 
 const WHITE_SPACE = 5;
-const { width: widthViewport, height: heightViewport } =
-  window.visualViewport;
+const { width: widthViewport, height: heightViewport } = window.visualViewport;
 const target = document.querySelector("#welcome-toast-hl");
-const {
-  width: widthTarget,
-  height: heightTarget,
-  x: xTarget,
-  y: yTarget,
-} = target.getBoundingClientRect();
+const { width: widthTarget, height: heightTarget, x: xTarget, y: yTarget } = target.getBoundingClientRect();
 const yTargetInLayout = Math.ceil(yTarget) - WHITE_SPACE;
 
 const overlay = window.document.createElement("div");
 overlay.id = "welcomeToastOverlay";
-setOverlay(
-  widthViewport,
-  heightViewport,
-  widthTarget,
-  heightTarget,
-  xTarget,
-  yTargetInLayout,
-);
+setOverlay(widthViewport, heightViewport, widthTarget, heightTarget, xTarget, yTargetInLayout);
 app.insertAdjacentElement("afterend", overlay);
 
 const popover = window.document.createElement("div");
@@ -76,25 +71,14 @@ function setPopover() {
 }
 
 function handlePopoverWindowResize() {
-  const {
-    width: widthTarget,
-    x: xTarget,
-    y: yTarget,
-  } = target.getBoundingClientRect();
+  const { width: widthTarget, x: xTarget, y: yTarget } = target.getBoundingClientRect();
   const xTargetInLayout = xTarget + widthTarget + WHITE_SPACE;
   popover.style.top = `${yTarget}px`;
   popover.style.left = `${xTargetInLayout}px`;
   return;
 }
 
-function setOverlay(
-  widthViewport,
-  heigthViewport,
-  widthTarget,
-  heightTarget,
-  xTarget,
-  yTarget,
-) {
+function setOverlay(widthViewport, heigthViewport, widthTarget, heightTarget, xTarget, yTarget) {
   overlay.innerHTML = `
       <svg
         viewBox="0 0 ${widthViewport} ${heigthViewport}"
@@ -115,24 +99,11 @@ function setOverlay(
 }
 
 function handleOverlayWindowResize() {
-  const { width: widthViewport, height: heightViewport } =
-    window.visualViewport;
-  const {
-    width: widthTarget,
-    height: heightTarget,
-    x: xTarget,
-    y: yTarget,
-  } = target.getBoundingClientRect();
+  const { width: widthViewport, height: heightViewport } = window.visualViewport;
+  const { width: widthTarget, height: heightTarget, x: xTarget, y: yTarget } = target.getBoundingClientRect();
   const yTargetInLayout = Math.ceil(yTarget) - WHITE_SPACE;
 
-  return setOverlay(
-    widthViewport,
-    heightViewport,
-    widthTarget,
-    heightTarget,
-    xTarget,
-    yTargetInLayout,
-  );
+  return setOverlay(widthViewport, heightViewport, widthTarget, heightTarget, xTarget, yTargetInLayout);
 }
 
 function handleRemovePopover(event) {
