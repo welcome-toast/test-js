@@ -103,8 +103,8 @@ function handleOverlayWindowResize() {
   const { width: widthViewport, height: heightViewport } = window.visualViewport;
   const { width: widthTarget, height: heightTarget, x: xTarget, y: yTarget } = target.getBoundingClientRect();
   const yTargetInLayout = Math.ceil(yTarget) - WHITE_SPACE;
-
-  return setOverlay(widthViewport, heightViewport, widthTarget, heightTarget, xTarget, yTargetInLayout);
+  setOverlay(widthViewport, heightViewport, widthTarget, heightTarget, xTarget, yTargetInLayout);
+  return;
 }
 
 function handleRemovePopover(event) {
