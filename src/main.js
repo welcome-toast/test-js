@@ -8,6 +8,7 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
 const client = supabase.createClient(supabaseUrl, supabaseKey);
 async function getProject() {
   const { data: project, error } = await client.from("project").select("id");
+  return;
 }
 getProject();
 
